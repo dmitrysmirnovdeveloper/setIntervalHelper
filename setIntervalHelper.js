@@ -1,18 +1,26 @@
 function setIntervalHelper(callback, delay)
 {
+	// Текущий объект
 	var that = this,
+		// Время старта интервала
 		startTime = Date.now(),
+		// Идентификатор интервала
 		timerId,
+		// Время запуска паузы
 		pauseStart,
+		// Время окончания паузы
 		pauseStop,
+		// Время перезапуска таймера
 		restart,
+		// Общее время работы интервала
 		unit,
+		// Статусы состояния
 		status = {
 			pause: false,
 			resume: false,
 			start: false
 		};
-
+	// Функция остановки интервала
 	that.stop = function(func)
 	{
 		// Если статусы запуска и перезапуска false
@@ -44,7 +52,7 @@ function setIntervalHelper(callback, delay)
 		}
 		return true;
 	};
-
+	// Функция паузы интервала
 	that.pause = function(func)
 	{
 		// Если старт false
@@ -66,7 +74,7 @@ function setIntervalHelper(callback, delay)
 		}
 		return true;
 	};
-
+	// Функция восстановления интервала
 	that.resume = function(func)
 	{
 		// Если пауза false
@@ -104,6 +112,25 @@ function setIntervalHelper(callback, delay)
 		}
 		return true;
 	};
+	// Перезапуск интервала
+	that.reset = function(func)
+	{
+		// Если статусы запуска и перезапуска false
+		if(!status.start && !status.resume)
+		{
+			return false;
+		}
+		// Останавливаем интервал
+		that.stop();
+		// Перезапускаем интервал
+		startFunc();
+		// Если была передана функция
+		if(typeof func === 'function')
+		{
+			// Вызаваем функцию
+			func.call();
+		}
+	}
 	// Функция старта интервала
 	var startFunc = function()
 	{
